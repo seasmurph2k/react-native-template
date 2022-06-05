@@ -1,14 +1,16 @@
 import React from 'react';
-import {useColorScheme} from 'react-native';
-
-import {Provider as PaperProvider} from 'react-native-paper';
+import {Provider as StoreProvider} from 'react-redux';
+import {Store, persistor} from './Store';
 import AppContainer from './src/AppContainer';
+import {PersistGate} from 'redux-persist/integration/react';
 
 const App = () => {
   return (
-    <PaperProvider>
-      <AppContainer />
-    </PaperProvider>
+    <StoreProvider store={Store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <AppContainer />
+      </PersistGate>
+    </StoreProvider>
   );
 };
 

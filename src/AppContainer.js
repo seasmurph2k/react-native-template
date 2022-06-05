@@ -1,33 +1,45 @@
 import React from 'react';
 import {
   SafeAreaView,
-  useColorScheme,
   ScrollView,
   StatusBar,
   Text,
   View,
   StyleSheet,
 } from 'react-native';
-import {Surface} from 'react-native-paper';
+import {useSelector, useDispatch} from 'react-redux';
+import {Button, Surface} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import {Provider as PaperProvider} from 'react-native-paper';
+import {lTheme, dTheme} from './Utills/Theme';
+import {toggleTheme} from './Reducers/AppReducer';
 export default function AppContainer() {
-  const isDarkMode = useColorScheme() === 'dark';
-
+  const theme = useSelector(state => state.app.theme);
+  const isDarkMode = theme === 'dark';
+  const dispatch = useDispatch();
   return (
-    <SafeAreaView style={styles.grow}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        contentContainerStyle={styles.grow}>
-        <Surface style={styles.grow}>
-          <View>
-            <MaterialCommunityIcons name="home" size={100} color="red" />
-            <Text>Hello World</Text>
-          </View>
-        </Surface>
-      </ScrollView>
-    </SafeAreaView>
+    <PaperProvider theme={theme === 'dark' ? dTheme : lTheme}>
+      <SafeAreaView style={styles.grow}>
+        <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+        <ScrollView
+          contentInsetAdjustmentBehavior="automatic"
+          contentContainerStyle={styles.grow}>
+          <Surface style={styles.grow}>
+            <View>
+              <MaterialCommunityIcons name="home" size={100} color="red" />
+              <Text>Hello World</Text>
+              <Button
+                mode="contained"
+                onPress={() => {
+                  dispatch(toggleTheme());
+                }}>
+                toggle theme/dark mode
+              </Button>
+            </View>
+          </Surface>
+        </ScrollView>
+      </SafeAreaView>
+    </PaperProvider>
   );
 }
 
